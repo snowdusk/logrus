@@ -49,6 +49,8 @@ type TextFormatter struct {
 	// system that already adds timestamps.
 	DisableTimestamp bool
 
+	DisableLevel bool
+
 	// Enable logging the full timestamp when a TTY is attached instead of just
 	// the time passed since beginning of execution.
 	FullTimestamp bool
@@ -147,7 +149,9 @@ func (f *TextFormatter) Format(entry *Entry) ([]byte, error) {
 	if !f.DisableTimestamp {
 		fixedKeys = append(fixedKeys, f.FieldMap.resolve(FieldKeyTime))
 	}
-	fixedKeys = append(fixedKeys, f.FieldMap.resolve(FieldKeyLevel))
+	if !f.DisableLevel {
+		fixedKeys = append(fixedKeys, f.FieldMap.resolve(FieldKeyLevel))
+	}
 	if entry.Message != "" {
 		fixedKeys = append(fixedKeys, f.FieldMap.resolve(FieldKeyMsg))
 	}
